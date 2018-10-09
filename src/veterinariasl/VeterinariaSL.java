@@ -7,6 +7,7 @@ package veterinariasl;
 
 import clasesdata.ClienteData;
 import clasesprincipales.Cliente;
+import java.util.List;
 
 /**
  *
@@ -20,9 +21,10 @@ public class VeterinariaSL {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        Cliente pepito= new Cliente("32423423", "asdasdas", "2a2312", "asd23412fw", "Bsdase 2010");
+ 
         ClienteData pepitoData= new ClienteData();
-        pepitoData.guardarCliente(pepito);
+        List<Cliente> clientes = pepitoData.listarClientes();
+        clientes.stream().forEach(cliente -> System.out.println(cliente.getNombre_apellido()));
     
     }
     

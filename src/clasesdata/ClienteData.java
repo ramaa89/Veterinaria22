@@ -7,6 +7,8 @@ package clasesdata;
 
 import clasesprincipales.Cliente;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +24,7 @@ public class ClienteData {
         conn = Conexion.getConexion();
     }
 
-    public void guardarCliente(Cliente cliente) {
+    public void guardarCliente(Cliente cliente) throws SQLException{
         String sql = "INSERT INTO cliente VALUES (?, ?, ?, ?, ?);";
         try {
             try (PreparedStatement stm = conn.prepareStatement(sql)) {
@@ -38,11 +40,45 @@ public class ClienteData {
                     System.out.println("Se agrego el Cliente: " + cliente.getNombre_apellido());
                 }
             }
-            conn.close();
+            
 
         } catch (SQLException ex) {
             Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally{
+            conn.close();
+        }
+    }
+    
+    public List<Cliente> listarClientes() throws SQLException{
+        List<Cliente> clientes = new ArrayList<>();
+        
+        try{
+            String sql = "SELECT * FROM cliente;";
+            
+            try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+                
+                Cliente client;
+                while(rs.next()){
+                    client = new Cliente();
+                    client.setDni(rs.getString("dni_cliente"));
+                    client.setNombre_apellido(rs.getString("nombre_apellido"));
+                    client.setTel(rs.getString("telefono"));
+                    client.setPersona_alt(rs.getString("persona_alternativa"));
+                    client.setDireccion(rs.getString("direccion"));
+                    clientes.add(client);
+                }
+            }
+                      
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+        finally{
+            conn.close();
+        }
+        return clientes;
+        
     }
 
 }
