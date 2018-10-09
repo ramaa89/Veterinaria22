@@ -10,13 +10,13 @@ package clasesprincipales;
  * @author Usuario
  */
 public class Cliente {
-    private int dni;
+    private String dni;
     private String nombre_apellido;
-    private int tel;
+    private String tel;
     private String persona_alt;
     private String direccion;
 
-    public Cliente(int dni, String nombre_apellido, int tel, String persona_alt, String direccion) {
+    public Cliente(String dni, String nombre_apellido, String tel, String persona_alt, String direccion) {
         this.dni = dni;
         this.nombre_apellido = nombre_apellido;
         this.tel = tel;
@@ -27,11 +27,11 @@ public class Cliente {
     public Cliente() {
     }
 
-    public int getDni() {
+    public String getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(String dni) {
         this.dni = dni;
     }
 
@@ -43,11 +43,11 @@ public class Cliente {
         this.nombre_apellido = nombre_apellido;
     }
 
-    public int getTel() {
+    public String getTel() {
         return tel;
     }
 
-    public void setTel(int tel) {
+    public void setTel(String tel) {
         this.tel = tel;
     }
 

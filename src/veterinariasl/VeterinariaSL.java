@@ -20,7 +20,7 @@ public class VeterinariaSL {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        Cliente pepito= new Cliente(123456, "Pepito Juarez", 26645466, "Alterno", "España 213");
+        Cliente pepito= new Cliente("32423423", "asdasdas", "2a2312", "asd23412fw", "Bsdase 2010");
         ClienteData pepitoData= new ClienteData();
         pepitoData.guardarCliente(pepito);
     
