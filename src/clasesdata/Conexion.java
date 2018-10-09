@@ -4,11 +4,37 @@
  * and open the template in the editor.
  */
 package clasesdata;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Usuario
  */
 public class Conexion {
+    private String url;
+    private String user;
+    private String pass;
+    private static Connection conexion;
     
+    private Conexion(){
+        url = "jdbc:mysql://db4free.net/veterinaria22";
+        user = "grupo22";
+        pass = "123456789";
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = DriverManager.getConnection(url, user, pass);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+    
+    public static Connection getConexion(){
+        if (conexion == null){
+            Conexion dataBaseConnection = new Conexion();
+        }
+        return conexion;
+    }
 }
