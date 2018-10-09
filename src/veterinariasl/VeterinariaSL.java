@@ -5,6 +5,9 @@
  */
 package veterinariasl;
 
+import clasesdata.ClienteData;
+import clasesprincipales.Cliente;
+
 /**
  *
  * @author Usuario
@@ -16,6 +19,11 @@ public class VeterinariaSL {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Cliente pepito= new Cliente(123456, "Pepito Juarez", 26645466, "Alterno", "España 213");
+        ClienteData pepitoData= new ClienteData();
+        pepitoData.guardarCliente(pepito);
+    
     }
     
 }
