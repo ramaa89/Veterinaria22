@@ -22,11 +22,40 @@ public class VeterinariaSL {
      */
     public static void main(String[] args) throws SQLException {
         // TODO code application logic here
+
         
- 
-        ClienteData pepitoData= new ClienteData();
-        List<Cliente> clientes = pepitoData.listarClientes();
-        clientes.stream().forEach(cliente -> System.out.println(cliente.getNombre_apellido()));
+        //Guardando Cliente en BD
+         Cliente clientePrueba= new Cliente("34587657","Pepito Prueba", "266415648", "Amigo alterno", "Colon 654");
+         
+         ClienteData dataPrueba=new ClienteData();
+         
+         dataPrueba.guardarCliente(clientePrueba);
+         
+         
+         //Buscar ese cliente
+         
+        /* Cliente resultado=dataPrueba.buscarCliente("34587657");
+         
+         System.out.println(resultado.getDni()+" "+ resultado.getNombre_apellido()+ " "+ resultado.getTel()+ " "+ resultado.getPersona_alt()+" "+ resultado.getDireccion());
+         
+        */
+         
+         
+        //Borrar ese cliente
+          /*
+          ClienteData dataPrueba=new ClienteData();
+          dataPrueba.borrarCliente("34587657");
+        */
+          
+          
+          //Obtener lista de clientes
+          /*
+          List<Cliente> lista= dataPrueba.listarClientes();
+          
+          lista.stream().forEach(Cliente -> System.out.println(Cliente.getDni()+" "+ Cliente.getNombre_apellido()+ " "+ Cliente.getTel()+ " "+Cliente.getPersona_alt()+" "+ Cliente.getDireccion()));
+         */
+              
+         
     
     }
     

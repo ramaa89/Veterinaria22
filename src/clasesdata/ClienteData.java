@@ -91,7 +91,7 @@ public class ClienteData {
                 stm.executeUpdate();
                 
                 stm.close();
-                conn.close();
+                
                   
             } catch (SQLException ex) {
                 Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,11 +115,44 @@ public class ClienteData {
                 stm.executeUpdate();
                 
                 stm.close();
-                conn.close();
+                
                
             } catch (SQLException ex) {
                 Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
             }
                  }
 
+    
+       public Cliente buscarCliente(String dni){
+           
+           Cliente cliente=null;
+           
+           String sql="SELECT * FROM cliente WHERE dni_cliente=?;";
+        try {
+               try (PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                   stm.setString(1, dni);
+                   
+                   ResultSet rs= stm.executeQuery();
+                   
+                   
+                   
+                   while(rs.next()){
+                       cliente= new Cliente();
+                       cliente.setDni(rs.getString("dni_cliente"));
+                       cliente.setNombre_apellido(rs.getString("nombre_apellido"));
+                       cliente.setTel(rs.getString("telefono"));
+                       cliente.setPersona_alt(rs.getString("persona_alternativa"));
+                       cliente.setDireccion(rs.getString("direccion"));
+                       
+                       
+                   }  }
+                
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return cliente;
+       }
 }
