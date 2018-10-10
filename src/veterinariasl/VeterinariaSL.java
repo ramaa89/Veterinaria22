@@ -7,6 +7,7 @@ package veterinariasl;
 
 import clasesdata.ClienteData;
 import clasesprincipales.Cliente;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,8 +18,9 @@ public class VeterinariaSL {
 
     /**
      * @param args the command line arguments
+     * @throws java.sql.SQLException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // TODO code application logic here
         
  

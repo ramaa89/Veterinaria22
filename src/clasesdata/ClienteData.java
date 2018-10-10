@@ -80,5 +80,46 @@ public class ClienteData {
         return clientes;
         
     }
+    
+    public void borrarCliente(String dni){
+                 
+                 String sql= "DELETE FROM cliente WHERE dni_cliente=?;";
+                 
+            try {
+                PreparedStatement stm= conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setString(1, dni);
+                stm.executeUpdate();
+                
+                stm.close();
+                conn.close();
+                  
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                 
+             }
+    
+    public void actualizarCliente(Cliente cliente){
+                 
+                 String sql= "UPDATE cliente SET nombre_apellido= ?, telefono=?, persona_alternativa=?, direccion=? WHERE dni_cliente=?;";
+                     
+            try {
+                
+                PreparedStatement stm=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stm.setString(1, cliente.getNombre_apellido());
+                stm.setString(2, cliente.getTel());
+                stm.setString(3, cliente.getPersona_alt());
+                stm.setString(4, cliente.getDireccion());
+                stm.setString(5, cliente.getDni());
+                
+                stm.executeUpdate();
+                
+                stm.close();
+                conn.close();
+               
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteData.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                 }
 
 }
