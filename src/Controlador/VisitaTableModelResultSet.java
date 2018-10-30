@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
@@ -19,12 +18,13 @@ import javax.swing.table.AbstractTableModel;
  * @author MrLyoto
  */
 public class VisitaTableModelResultSet extends AbstractTableModel {
-    boolean status;
+    boolean statusOk;
     Object[][] array;
     String[] columnNames;
     String parametroDeBusqueda;
 
     public VisitaTableModelResultSet(String buscar) {
+        statusOk = true;
         parametroDeBusqueda = buscar;
         array = resultSetToArray();
 
@@ -57,6 +57,7 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
 
             }
             if(rowCount == 0){
+                statusOk = false;
                 JOptionPane.showMessageDialog(null, "No se encontraron resultados");
                 throw new SQLException("No se encontraron coincidencias.");
                 
@@ -64,6 +65,7 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
             return resultArray;
         } catch (SQLException ex) {
             System.out.println("Error al buscar datos de visitas");
+            System.out.println(ex);
             return null;
         } finally {
             try {
@@ -78,13 +80,21 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
 
 @Override
     public int getRowCount() {
-        return array.length;
+        if(statusOk){
+            return array.length;
+        }else{
+            return 0;
+        }
 
     }
 
     @Override
     public int getColumnCount() {
-        return array[0].length;
+        if(statusOk){
+            return array[0].length;
+        }else{
+            return 0;
+        }
     }
 
     @Override

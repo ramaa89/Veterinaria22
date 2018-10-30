@@ -31,15 +31,14 @@ public class Conexion {
         try {
             //Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection(url, user, pass);
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {            
             System.out.println("CANT CONNECT");
         }        
     }
     
     public static Connection getConexion(){
         try {
-            if (conexion == null || conexion.isClosed()){
+            if (conexion == null || !conexion.isValid(10)){
                 Conexion dataBaseConnection = new Conexion();
             }
         } catch (SQLException ex) {
