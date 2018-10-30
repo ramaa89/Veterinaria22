@@ -27,11 +27,6 @@ public class VeterinariaSL {
         
         vistaPrincipal.setVisible(true);
         
-        JPanel panelCentral = vistaPrincipal.getPanelCentral();
-        
-        panelCentral.add(new VistaVisitaMain(),BorderLayout.CENTER);
-        panelCentral.revalidate();
-        panelCentral.repaint();
         
         
         //VisitaDeAtencionData visitaDeAtencionDATA = new VisitaDeAtencionData();

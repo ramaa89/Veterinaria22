@@ -5,7 +5,8 @@
  */
 package Interface;
 
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  *
@@ -39,6 +40,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -46,6 +48,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VeterinariaSL");
         setExtendedState(6);
+        setMinimumSize(new java.awt.Dimension(640, 480));
         setName("framePrincipal"); // NOI18N
 
         panelCentral.setBackground(new java.awt.Color(0, 102, 102));
@@ -74,8 +77,21 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Visitas");
 
-        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.setText("Nueva visita");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem3);
+
+        jMenuItem7.setText("Ver visitas");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
 
         jMenuBar1.add(jMenu3);
 
@@ -95,15 +111,50 @@ public class VistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        panelCentral.add(new VistaVisitaMain());
+        panelCentral.revalidate();
+        panelCentral.repaint();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        JFrame popUp = new JFrame("Nueva visita");
+        popUp.setLayout(new BorderLayout());
+        popUp.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        popUp.setSize(500, 500);
+        JLabel loading = new JLabel("Cargando...");
+        loading.setHorizontalAlignment(SwingConstants.CENTER);
+        loading.setFont(new Font("Arial", Font.PLAIN, 28));
+        popUp.add(loading,BorderLayout.CENTER);
+        popUp.setVisible(true);
+
+        Thread hilo = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                VistaVisitaAgregar cargar = new Interface.VistaVisitaAgregar();
+                popUp.remove(loading);
+                popUp.add(cargar);
+                popUp.revalidate();
+                popUp.repaint();
+                System.out.println("asd");
+                
+                
+            }    
+        });     
+        hilo.start();
+
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,6 +204,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel panelCentral;
     // End of variables declaration//GEN-END:variables
 
@@ -160,5 +212,4 @@ public class VistaPrincipal extends javax.swing.JFrame {
         return panelCentral;
     }
 
-    
 }
