@@ -19,21 +19,31 @@ public class Conexion {
     private static Connection conexion;
     
     private Conexion(){
+        //url = "jdbc:mysql://localhost:3306/veterinaria22?serverTimeZone=UTC";
+        //user = "root";
+        //pass = "";
+        
         url = "jdbc:mysql://db4free.net/veterinaria22";
         user = "grupo22";
         pass = "123456789";
+                
         
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            //Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection(url, user, pass);
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("CANT CONNECT");
         }        
     }
     
     public static Connection getConexion(){
-        if (conexion == null){
-            Conexion dataBaseConnection = new Conexion();
+        try {
+            if (conexion == null || conexion.isClosed()){
+                Conexion dataBaseConnection = new Conexion();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return conexion;
     }

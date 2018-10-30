@@ -9,7 +9,7 @@ package Interface;
  *
  * @author Ines
  */
-public class FormularioMascotas extends javax.swing.JFrame {
+public class FormularioMascotas extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form FormularioVisitas
