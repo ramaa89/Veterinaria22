@@ -7,13 +7,8 @@ package veterinariasl;
 
 import Interface.VistaPrincipal;
 import Interface.VistaVisitaMain;
-import clasesdata.VisitaDeAtencionData;
-import clasesprincipales.VisitaDeAtencion;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 
 /**

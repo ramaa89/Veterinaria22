@@ -5,11 +5,7 @@
  */
 package Interface;
 
-import Controlador.VisitaTableModel;
 import Controlador.VisitaTableModelResultSet;
-import clasesdata.VisitaDeAtencionData;
-import clasesprincipales.VisitaDeAtencion;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,16 +36,33 @@ public class VistaVisitaMain extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxBuscar = new javax.swing.JComboBox<>();
+        jTextFieldBuscar = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVisitas = new javax.swing.JTable();
 
         setMinimumSize(new java.awt.Dimension(500, 500));
         setLayout(new java.awt.BorderLayout());
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Mostrar Todas las visitas");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Buscar por: ");
+
+        jComboBoxBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre de mascota", "DNI del dueño" }));
+
+        jTextFieldBuscar.setColumns(15);
+
+        jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -57,20 +70,39 @@ public class VistaVisitaMain extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(714, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(228, 228, 228)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jComboBoxBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jScrollPane1.setBorder(null);
 
         jTableVisitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -86,20 +118,43 @@ public class VistaVisitaMain extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        VisitaTableModelResultSet tableModel = new VisitaTableModelResultSet();
+        String buscar = "1";
+        VisitaTableModelResultSet tableModel = new VisitaTableModelResultSet(buscar);
         
         getjTable1().setModel(tableModel);
         getjTable1().repaint();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String buscar, tipo, valor;
+        if(jComboBoxBuscar.getSelectedItem() == "Nombre de mascota"){
+            tipo = "m.alias";
+        }else{
+            tipo = "";
+        }
+        if(jComboBoxBuscar.getSelectedItem() == "DNI del dueño"){
+            tipo = "c.dni_cliente";
+        }
+        
+        buscar = tipo + " like " + "'" + jTextFieldBuscar.getText() + "'";
+                
+        VisitaTableModelResultSet tableModel = new VisitaTableModelResultSet(buscar);
+        
+        getjTable1().setModel(tableModel);
+        getjTable1().repaint();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBoxBuscar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVisitas;
+    private javax.swing.JTextField jTextFieldBuscar;
     // End of variables declaration//GEN-END:variables
 
     public JButton getjButton1() {

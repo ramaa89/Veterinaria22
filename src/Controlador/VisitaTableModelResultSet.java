@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -19,28 +19,36 @@ import javax.swing.table.AbstractTableModel;
  * @author MrLyoto
  */
 public class VisitaTableModelResultSet extends AbstractTableModel {
+    boolean status;
     Object[][] array;
-    
+    String[] columnNames;
+    String parametroDeBusqueda;
 
-    public VisitaTableModelResultSet() {
-        
-            array = resultSetToArray();
-        
+    public VisitaTableModelResultSet(String buscar) {
+        parametroDeBusqueda = buscar;
+        array = resultSetToArray();
+
     }
 
-    private Object[][] resultSetToArray(){
+    private Object[][] resultSetToArray() {
         Connection con = Conexion.getConexion();
         try {
 
-            String sql = "SELECT id_visita, m.alias, t.nombre_trat, fecha, v.precio FROM visita v JOIN mascota m on m.id_masc = v.id_masc1 join tratamiento t on t.id_tratamiento = v.id_tratamiento1 where 1";
-            PreparedStatement stm = con.prepareStatement(sql);
+            String sql = "SELECT id_visita, m.alias, c.nombre_apellido, t.nombre_trat, fecha, v.precio FROM visita v JOIN mascota m on m.id_masc = v.id_masc1 join tratamiento t on t.id_tratamiento = v.id_tratamiento1 JOIN cliente c on m.dni_cliente1 = c.dni_cliente where " + parametroDeBusqueda;                                  
+            PreparedStatement stm = con.prepareStatement(sql);           
+            System.out.println(stm.toString());
             ResultSet rs = stm.executeQuery();
             int columnCount = rs.getMetaData().getColumnCount();
             rs.last();
             int rowCount = rs.getRow();
             Object[][] resultArray = new Object[rowCount][columnCount];
+            columnNames = new String[columnCount];
 
             rs.beforeFirst();
+
+            for (int i = 1; i <= columnCount; i++) {
+                columnNames[i - 1] = rs.getMetaData().getColumnName(i);
+            }
 
             while (rs.next()) {
                 for (int i = 0; i < columnCount; i++) {
@@ -48,10 +56,14 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
                 }
 
             }
+            if(rowCount == 0){
+                JOptionPane.showMessageDialog(null, "No se encontraron resultados");
+                throw new SQLException("No se encontraron coincidencias.");
+                
+            }
             return resultArray;
         } catch (SQLException ex) {
             System.out.println("Error al buscar datos de visitas");
-            System.out.println(ex);
             return null;
         } finally {
             try {
@@ -79,5 +91,10 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         return array[rowIndex][columnIndex];
     }
-    
+
+    @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
+    }
+
 }
