@@ -12,6 +12,7 @@ import java.util.Date;
  * @author Usuario
  */
 public class VisitaDeAtencion {
+
     private int idVisita;
     private int idMascota;
     private int idTratamiento;
@@ -19,6 +20,13 @@ public class VisitaDeAtencion {
     private double precio;
 
     public VisitaDeAtencion() {
+    }
+
+    public VisitaDeAtencion(int idMascota, int idTratamiento, Date fecha, double precio) {
+        this.idMascota = idMascota;
+        this.idTratamiento = idTratamiento;
+        this.fecha = fecha;
+        this.precio = precio;
     }
 
     public int getIdVisita() {
@@ -60,6 +68,5 @@ public class VisitaDeAtencion {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-    
-    
+
 }

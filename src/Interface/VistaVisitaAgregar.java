@@ -5,11 +5,22 @@
  */
 package Interface;
 
+import Interface.ComboBoxItems.ComboBoxMascotaItems;
+import Interface.ComboBoxItems.ComboBoxTratamientoItems;
 import clasesdata.Conexion;
+import clasesdata.VisitaDeAtencionData;
+import clasesprincipales.VisitaDeAtencion;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Window;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -18,8 +29,11 @@ import java.sql.Statement;
 public class VistaVisitaAgregar extends javax.swing.JPanel {
 
     private Connection con;
-            
+    ArrayList<ComboBoxMascotaItems> listOfMascotas = new ArrayList<>();
+    ArrayList<ComboBoxTratamientoItems> listOfTratamientos = new ArrayList<>();
+
     public VistaVisitaAgregar() {
+
         con = Conexion.getConexion();
         initComponents();
         loadComboBoxes();
@@ -46,6 +60,18 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
 
         jLabel2.setText("Nombre del tratamiento:");
 
+        jComboBoxMascota.setToolTipText("");
+        jComboBoxMascota.setAutoscrolls(true);
+        jComboBoxMascota.setMinimumSize(new java.awt.Dimension(200, 20));
+        jComboBoxMascota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxMascotaActionPerformed(evt);
+            }
+        });
+
+        jComboBoxTratamiento.setAutoscrolls(true);
+        jComboBoxTratamiento.setMinimumSize(new java.awt.Dimension(200, 20));
+
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,9 +90,9 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBoxMascota, 0, 100, Short.MAX_VALUE)
+                    .addComponent(jComboBoxMascota, 0, 200, Short.MAX_VALUE)
                     .addComponent(jComboBoxTratamiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
@@ -84,14 +110,38 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(jComboBoxTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(205, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- 
+
+        int idMascota = listOfMascotas.stream().filter((ComboBoxMascotaItems mascota) -> {
+            return mascota.toString().equals(jComboBoxMascota.getSelectedItem());
+        }).mapToInt(item -> item.getId()).sum();
+
+        int idTratamiento = listOfTratamientos.stream().filter((trat) -> {
+            return trat.toString().equals(jComboBoxTratamiento.getSelectedItem());
+        }).mapToInt(item -> item.getId()).sum();
+
+        double precio = listOfTratamientos.stream().filter((trat) -> {
+            return trat.toString().equals(jComboBoxTratamiento.getSelectedItem());
+        }).mapToDouble(item -> item.getPrecio()).sum();
+
+        Date fecha = new Date();
+
+        VisitaDeAtencion visita = new VisitaDeAtencion(idMascota, idTratamiento, fecha, precio);
+
+        VisitaDeAtencionData visitaData = new VisitaDeAtencionData();
+        visitaData.agregarVisita(visita);
+        obtenerFramePadre().dispose();
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jComboBoxMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMascotaActionPerformed
+        String id = (String) jComboBoxMascota.getSelectedItem();
+        System.out.println(id.replaceAll("\\D", ""));
+    }//GEN-LAST:event_jComboBoxMascotaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -102,31 +152,103 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void loadComboBoxes() {
-        String sqlmascotas = "SELECT distinct alias from mascota";
-        String sqltrar = "SELECT distinct nombre_trat from tratamiento";
-        
-        
-        try(Statement stm = con.createStatement()){
-            ResultSet rs = stm.executeQuery(sqlmascotas);
-            while(rs.next()){
-                
-                jComboBoxMascota.addItem(rs.getString(1));
+        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1;";
+        String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
+
+        try (PreparedStatement stmMascotas = con.prepareStatement(sqlmascotas); PreparedStatement stmTrat = con.prepareStatement(sqltrar)) {
+
+            ResultSet rs = stmMascotas.executeQuery();
+            while (rs.next()) {
+                listOfMascotas.add(new ComboBoxMascotaItems(rs.getInt(1), rs.getString(2), rs.getString(3)));
             }
-            rs.close();
-            rs = stm.executeQuery(sqltrar);
-            while(rs.next()){
-                jComboBoxTratamiento.addItem(rs.getString(1));
+
+            rs = stmTrat.executeQuery();
+            while (rs.next()) {
+                listOfTratamientos.add(new ComboBoxTratamientoItems(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-            
-        finally{
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                
+
+        for (ComboBoxMascotaItems item : listOfMascotas) {
+            jComboBoxMascota.addItem(item.toString());
+        }
+
+        for (ComboBoxTratamientoItems item : listOfTratamientos) {
+            jComboBoxTratamiento.addItem(item.toString());
+        }
+
+    }
+
+    private Window obtenerFramePadre() {
+        Container p = getParent();
+        Container temp = null;
+
+        while (p != null) {
+            p = p.getParent();
+            if (p != null) {
+                temp = p;
             }
         }
+        return (Window) temp;
     }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        Container p = getParent();
+        Container temp = null;
+        Window def = null;
+
+        while (p != null) {
+            p = p.getParent();
+            if (p != null) {
+                temp = p;
+            }
+        }
+        def = (Window) temp;
+
+        def.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+
+    }
+
 }

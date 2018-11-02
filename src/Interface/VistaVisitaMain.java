@@ -6,7 +6,11 @@
 package Interface;
 
 import Controlador.VisitaTableModelResultSet;
+import clasesdata.Conexion;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,21 +39,24 @@ public class VistaVisitaMain extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButtonMostrarTodo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jComboBoxBuscar = new javax.swing.JComboBox<>();
         jTextFieldBuscar = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        jButtonBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVisitas = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonBorrar = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(500, 500));
         setLayout(new java.awt.BorderLayout());
 
-        jButton1.setText("Mostrar Todas las visitas");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonMostrarTodo.setText("Mostrar Todas las visitas");
+        jButtonMostrarTodo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonMostrarTodoActionPerformed(evt);
             }
         });
 
@@ -59,10 +66,10 @@ public class VistaVisitaMain extends javax.swing.JPanel {
 
         jTextFieldBuscar.setColumns(15);
 
-        jButton2.setText("Buscar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonBuscarActionPerformed(evt);
             }
         });
 
@@ -78,11 +85,11 @@ public class VistaVisitaMain extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 312, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(jButtonMostrarTodo)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(228, 228, 228)
-                .addComponent(jButton2)
+                .addComponent(jButtonBuscar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -94,9 +101,9 @@ public class VistaVisitaMain extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addComponent(jComboBoxBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
+                    .addComponent(jButtonMostrarTodo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -104,6 +111,7 @@ public class VistaVisitaMain extends javax.swing.JPanel {
 
         jScrollPane1.setBorder(null);
 
+        jTableVisitas.setAutoCreateRowSorter(true);
         jTableVisitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -115,50 +123,103 @@ public class VistaVisitaMain extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTableVisitas);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
+
+        jButtonEditar.setText("Editar");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonEditar)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonBorrar)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonBorrar)
+                    .addComponent(jButtonEditar))
+                .addGap(5, 5, 5))
+        );
+
+        add(jPanel2, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonMostrarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMostrarTodoActionPerformed
         String buscar = "1";
         VisitaTableModelResultSet tableModel = new VisitaTableModelResultSet(buscar);
-        
+
         getjTable1().setModel(tableModel);
         getjTable1().repaint();
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonMostrarTodoActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         String buscar, tipo, valor;
-        if(jComboBoxBuscar.getSelectedItem() == "Nombre de mascota"){
+        if (jComboBoxBuscar.getSelectedItem() == "Nombre de mascota") {
             tipo = "m.alias";
-        }else{
+        } else {
             tipo = "";
         }
-        if(jComboBoxBuscar.getSelectedItem() == "DNI del dueño"){
+        if (jComboBoxBuscar.getSelectedItem() == "DNI del dueño") {
             tipo = "c.dni_cliente";
         }
-        
+
         buscar = tipo + " like " + "'" + jTextFieldBuscar.getText() + "'";
-                
+
         VisitaTableModelResultSet tableModel = new VisitaTableModelResultSet(buscar);
-        
+
         getjTable1().setModel(tableModel);
         getjTable1().repaint();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
 
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        try {
+            int selectedRow = jTableVisitas.getSelectedRow();
+            if (selectedRow > 0) {
+                int idVisita = (int) jTableVisitas.getModel().getValueAt(selectedRow, 0);
+                String sql = "delete from visita where id_visita = ?;";
+                PreparedStatement ps = Conexion.getConexion().prepareStatement(sql);
+                ps.setInt(1, idVisita);
+                if (ps.executeUpdate() > 0) {
+                    JOptionPane.showMessageDialog(null, "Visita borrada");
+                }
+            }
+            jButtonMostrarTodoActionPerformed(evt);
+        } catch (SQLException ex) {
+            System.out.println("Error al borrar visita");
+        }
+
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonBorrar;
+    private javax.swing.JButton jButtonBuscar;
+    private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonMostrarTodo;
     private javax.swing.JComboBox<String> jComboBoxBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVisitas;
     private javax.swing.JTextField jTextFieldBuscar;
     // End of variables declaration//GEN-END:variables
 
     public JButton getjButton1() {
-        return jButton1;
+        return jButtonMostrarTodo;
     }
 
     public JPanel getjPanel1() {
@@ -172,6 +233,5 @@ public class VistaVisitaMain extends javax.swing.JPanel {
     public JTable getjTable1() {
         return jTableVisitas;
     }
-
 
 }
