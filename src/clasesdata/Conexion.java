@@ -21,14 +21,13 @@ public class Conexion {
     private static Connection conexion;
 
     private Conexion() {
-        url = "jdbc:mysql://localhost:3306/veterinaria22?serverTimeZone=UTC";
+        url = "jdbc:mysql://localhost:3306/veterinariasl?useTimezone=false&serverTimezone=UTC";
         user = "root";
         pass = "";
 
         //url = "jdbc:mysql://db4free.net/veterinaria22";
         //user = "grupo22";
         //pass = "123456789";
-
         try {
             //Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection(url, user, pass);

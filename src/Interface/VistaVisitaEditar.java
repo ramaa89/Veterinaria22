@@ -9,19 +9,10 @@ import Controlador.TextFieldDayValidator;
 import Controlador.TextFieldOnlyNumbers;
 import Controlador.TextFieldValidator;
 import clasesprincipales.VisitaDeAtencion;
-import java.awt.Color;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
-import javax.swing.text.DateFormatter;
 
 /**
  *
@@ -30,22 +21,21 @@ import javax.swing.text.DateFormatter;
 public class VistaVisitaEditar extends javax.swing.JFrame {
 
     VisitaDeAtencion visita;
-    
 
     public VistaVisitaEditar(VisitaDeAtencion visita) {
-        
+
         this.visita = visita;
         initComponents();
+        setLocationRelativeTo(null);
         jTextFieldIdMascota.setText(String.valueOf(visita.getIdMascota()));
         jTextFieldIdTratamiento.setText(String.valueOf(visita.getIdTratamiento()));
         jTextFieldDia.setText(visita.getFecha().toString());
         jTextFieldPrecio.setText(String.valueOf(visita.getPrecio()));
         jSpinner1.setValue(visita.getFecha());
         Calendar date = Calendar.getInstance();
-        date.setTime((Date)jSpinner1.getValue());
+        date.setTime((Date) jSpinner1.getValue());
         System.out.println(date.get(Calendar.MONTH));
-        
-        
+
     }
 
     /**
@@ -229,8 +219,7 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
         validator.addField(jTextFieldDia, new TextFieldDayValidator());
         validator.addField(jTextFieldPrecio, new TextFieldOnlyNumbers());
         System.out.println(validator.validate());
-        
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextFieldDiaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDiaFocusLost
@@ -238,7 +227,7 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldDiaFocusLost
 
     private void jTextFieldPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPrecioKeyPressed
-        
+
     }//GEN-LAST:event_jTextFieldPrecioKeyPressed
 
     /**

@@ -18,7 +18,6 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -152,10 +151,10 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void loadComboBoxes() {
-        //String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1;";
-        //String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
-        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dnicliente1;";
-        String sqltrar = "SELECT idtratamiento, nombretrat, precio from tratamiento";
+        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1 order by alias;";
+        String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
+        //String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dnicliente1;";
+        //String sqltrar = "SELECT idtratamiento, nombretrat, precio from tratamiento";
 
         try (PreparedStatement stmMascotas = con.prepareStatement(sqlmascotas); PreparedStatement stmTrat = con.prepareStatement(sqltrar)) {
 
@@ -222,9 +221,9 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                
-                    Conexion.close();
-                
+
+                Conexion.close();
+
             }
 
             @Override

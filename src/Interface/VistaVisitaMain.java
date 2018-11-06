@@ -10,8 +10,6 @@ import clasesdata.Conexion;
 import clasesprincipales.VisitaDeAtencion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Calendar;
-import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -205,58 +203,59 @@ public class VistaVisitaMain extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Visita borrada");
                 }
                 jButtonMostrarTodoActionPerformed(evt);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Por favor seleccione una visita para borrarla.");
             }
-            
+
         } catch (Exception ex) {
             int stackNumber = 0;
-            for (int i = 0; i < ex.getStackTrace().length; i++) {               
-                if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
-                    stackNumber = i - 1;}
+            for (int i = 0; i < ex.getStackTrace().length; i++) {
+                if ("<init>".equals(ex.getStackTrace()[i].getMethodName())) {
+                    stackNumber = i - 1;
+                }
             }
             System.out.println("*******************************************************");
             System.out.println("Error al borrar visita");
             System.out.println(ex);
             System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
-            System.out.println("*******************************************************");                        
+            System.out.println("*******************************************************");
         }
 
     }//GEN-LAST:event_jButtonBorrarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         VisitaDeAtencion visita = new VisitaDeAtencion();
-        int selectedRow = jTableVisitas.getSelectedRow();       
-        if(selectedRow >= 0){
+        int selectedRow = jTableVisitas.getSelectedRow();
+        if (selectedRow >= 0) {
             int idVisita = (int) jTableVisitas.getModel().getValueAt(selectedRow, 0);
-            String sql = "select * from visita where idVisita = ?;";                    
-            try(PreparedStatement ps = Conexion.getConexion().prepareStatement(sql)){
+            String sql = "select * from visita where id_Visita = ?;";
+            try (PreparedStatement ps = Conexion.getConexion().prepareStatement(sql)) {
                 ps.setInt(1, idVisita);
                 ResultSet rs = ps.executeQuery();
                 rs.next();
-                visita.setIdVisita(rs.getInt(1));
-                visita.setIdMascota(rs.getInt(4));
-                visita.setIdTratamiento(rs.getInt(5));
-                visita.setFecha(rs.getDate(2));
-                visita.setPrecio(rs.getDouble(3));
-
+                visita.setIdVisita(rs.getInt("id_visita"));
+                visita.setIdTratamiento(rs.getInt("id_tratamiento1"));
+                visita.setIdMascota(rs.getInt("id_masc1"));
+                visita.setFecha(rs.getDate("fecha"));
+                visita.setPrecio(rs.getDouble("precio"));
+                
                 VistaVisitaEditar vistaEditar = new VistaVisitaEditar(visita);
                 vistaEditar.setVisible(true);
-            }            
-            catch(Exception ex){
+            } catch (Exception ex) {
                 int stackNumber = 0;
                 for (int i = 0; i < ex.getStackTrace().length; i++) {
-                    if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
-                        stackNumber = i - 1;}
+                    if ("<init>".equals(ex.getStackTrace()[i].getMethodName())) {
+                        stackNumber = i - 1;
+                    }
                 }
                 System.out.println("*******************************************************");
                 System.out.println("");
                 System.out.println(ex);
                 System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
-                System.out.println("*******************************************************");                                
-                      
+                System.out.println("*******************************************************");
+
             }
-            
+
         }
     }//GEN-LAST:event_jButtonEditarActionPerformed
 

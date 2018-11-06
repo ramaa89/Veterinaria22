@@ -62,7 +62,7 @@ public class VisitaDeAtencionData {
     public void agregarVisita(VisitaDeAtencion visita) {
         try {
             Connection con = Conexion.getConexion();
-            String sql = "insert into visita (idtratamiento1, id_masc1, fecha, precio) values (?,?,?,?);";
+            String sql = "insert into visita (id_tratamiento1, id_masc1, fecha, precio) values (?,?,?,?);";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, visita.getIdTratamiento());
             ps.setInt(2, visita.getIdMascota());
@@ -74,44 +74,44 @@ public class VisitaDeAtencionData {
                 JOptionPane.showMessageDialog(null, "Visita agregada");
             }
         } catch (SQLException ex) {
-            
+
             System.out.println("*******************************************************");
             System.out.println("Error al agregar visita");
             System.out.println(ex);
             System.out.println("Error en: " + ex.getStackTrace()[0].getClassName() + " ---> " + ex.getStackTrace()[0].getMethodName() + " || Line: " + ex.getStackTrace()[0].getLineNumber());
             System.out.println("*******************************************************");
-            
+
             JOptionPane.showMessageDialog(null, "Error al agregar visita");
-            
+
         } finally {
             Conexion.close();
         }
     }
-    
-    public void borrarVisita(int idVisita){
+
+    public void borrarVisita(int idVisita) {
         String sql = "delete from visita where idVisita = ?;";
-        try(PreparedStatement ps = Conexion.getConexion().prepareStatement(sql)){
+        try (PreparedStatement ps = Conexion.getConexion().prepareStatement(sql)) {
             ps.setInt(1, idVisita);
-            if(ps.executeUpdate()> 0) {
+            if (ps.executeUpdate() > 0) {
                 System.out.println("Visita eliminada");
             } else {
                 System.out.println("No se pudo eliminar");
             }
-            
-        }
-        catch(Exception ex){
+
+        } catch (Exception ex) {
             int stackNumber = 0;
             for (int i = 0; i < ex.getStackTrace().length; i++) {
-                if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
-                    stackNumber = i - 1;}
+                if ("<init>".equals(ex.getStackTrace()[i].getMethodName())) {
+                    stackNumber = i - 1;
+                }
             }
             System.out.println("*******************************************************");
             System.out.println("Error al borrar visita");
             System.out.println(ex);
             System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
             System.out.println("*******************************************************");
-            
-                }
-            
-        }   
+
+        }
+
+    }
 }
