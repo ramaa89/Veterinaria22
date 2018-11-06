@@ -52,7 +52,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jComboBoxMascota = new javax.swing.JComboBox<>();
         jComboBoxTratamiento = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        jButtonAgregar = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Agregar nueva visita"));
 
@@ -72,10 +72,10 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
         jComboBoxTratamiento.setAutoscrolls(true);
         jComboBoxTratamiento.setMinimumSize(new java.awt.Dimension(200, 20));
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAgregar.setText("OK");
+        jButtonAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonAgregarActionPerformed(evt);
             }
         });
 
@@ -93,7 +93,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
                     .addComponent(jComboBoxMascota, 0, 200, Short.MAX_VALUE)
                     .addComponent(jComboBoxTratamiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
@@ -101,7 +101,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -114,7 +114,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
 
         int idMascota = listOfMascotas.stream().filter((ComboBoxMascotaItems mascota) -> {
             return mascota.toString().equals(jComboBoxMascota.getSelectedItem());
@@ -136,7 +136,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
         visitaData.agregarVisita(visita);
         obtenerFramePadre().dispose();
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonAgregarActionPerformed
 
     private void jComboBoxMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxMascotaActionPerformed
         String id = (String) jComboBoxMascota.getSelectedItem();
@@ -144,7 +144,7 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBoxMascotaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAgregar;
     private javax.swing.JComboBox<String> jComboBoxMascota;
     private javax.swing.JComboBox<String> jComboBoxTratamiento;
     private javax.swing.JLabel jLabel1;
@@ -152,8 +152,10 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void loadComboBoxes() {
-        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1;";
-        String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
+        //String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1;";
+        //String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
+        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dnicliente1;";
+        String sqltrar = "SELECT idtratamiento, nombretrat, precio from tratamiento";
 
         try (PreparedStatement stmMascotas = con.prepareStatement(sqlmascotas); PreparedStatement stmTrat = con.prepareStatement(sqltrar)) {
 
@@ -166,8 +168,12 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
             while (rs.next()) {
                 listOfTratamientos.add(new ComboBoxTratamientoItems(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
+            System.out.println("*******************************************************");
+            System.out.println("Error al cargar combos");
             System.out.println(ex);
+            System.out.println("Error en: " + ex.getStackTrace()[0].getClassName() + " ---> " + ex.getStackTrace()[0].getMethodName() + " || Line: " + ex.getStackTrace()[0].getLineNumber());
+            System.out.println("*******************************************************");
         }
 
         for (ComboBoxMascotaItems item : listOfMascotas) {
@@ -216,11 +222,9 @@ public class VistaVisitaAgregar extends javax.swing.JPanel {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    con.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
+                
+                    Conexion.close();
+                
             }
 
             @Override

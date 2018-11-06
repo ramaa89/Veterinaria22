@@ -7,8 +7,11 @@ package Interface;
 
 import Controlador.VisitaTableModelResultSet;
 import clasesdata.Conexion;
+import clasesprincipales.VisitaDeAtencion;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -132,6 +135,11 @@ public class VistaVisitaMain extends javax.swing.JPanel {
         });
 
         jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -196,13 +204,61 @@ public class VistaVisitaMain extends javax.swing.JPanel {
                 if (ps.executeUpdate() > 0) {
                     JOptionPane.showMessageDialog(null, "Visita borrada");
                 }
+                jButtonMostrarTodoActionPerformed(evt);
+            }else{
+                JOptionPane.showMessageDialog(null, "Por favor seleccione una visita para borrarla.");
             }
-            jButtonMostrarTodoActionPerformed(evt);
-        } catch (SQLException ex) {
+            
+        } catch (Exception ex) {
+            int stackNumber = 0;
+            for (int i = 0; i < ex.getStackTrace().length; i++) {               
+                if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
+                    stackNumber = i - 1;}
+            }
+            System.out.println("*******************************************************");
             System.out.println("Error al borrar visita");
+            System.out.println(ex);
+            System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
+            System.out.println("*******************************************************");                        
         }
 
     }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        VisitaDeAtencion visita = new VisitaDeAtencion();
+        int selectedRow = jTableVisitas.getSelectedRow();       
+        if(selectedRow >= 0){
+            int idVisita = (int) jTableVisitas.getModel().getValueAt(selectedRow, 0);
+            String sql = "select * from visita where idVisita = ?;";                    
+            try(PreparedStatement ps = Conexion.getConexion().prepareStatement(sql)){
+                ps.setInt(1, idVisita);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                visita.setIdVisita(rs.getInt(1));
+                visita.setIdMascota(rs.getInt(4));
+                visita.setIdTratamiento(rs.getInt(5));
+                visita.setFecha(rs.getDate(2));
+                visita.setPrecio(rs.getDouble(3));
+
+                VistaVisitaEditar vistaEditar = new VistaVisitaEditar(visita);
+                vistaEditar.setVisible(true);
+            }            
+            catch(Exception ex){
+                int stackNumber = 0;
+                for (int i = 0; i < ex.getStackTrace().length; i++) {
+                    if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
+                        stackNumber = i - 1;}
+                }
+                System.out.println("*******************************************************");
+                System.out.println("");
+                System.out.println(ex);
+                System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
+                System.out.println("*******************************************************");                                
+                      
+            }
+            
+        }
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBorrar;

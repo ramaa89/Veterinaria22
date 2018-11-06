@@ -34,7 +34,8 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
         Connection con = Conexion.getConexion();
         try {
 
-            String sql = "SELECT id_visita, m.alias, c.nombre_apellido, t.nombre_trat, fecha, v.precio FROM visita v JOIN mascota m on m.id_masc = v.id_masc1 join tratamiento t on t.id_tratamiento = v.id_tratamiento1 JOIN cliente c on m.dni_cliente1 = c.dni_cliente where " + parametroDeBusqueda;                                  
+            String sql = "SELECT idvisita, m.alias, c.nombre_apellido, t.nombretrat, fecha, v.precio FROM visita v JOIN mascota m on m.id_masc = v.id_masc1 join tratamiento t on t.idtratamiento = v.idtratamiento1 JOIN cliente c on m.dnicliente1 = c.dni_cliente where " + parametroDeBusqueda;
+            //String sql = "SELECT id_visita, m.alias, c.nombre_apellido, t.nombre_trat, fecha, v.precio FROM visita v JOIN mascota m on m.id_masc = v.id_masc1 join tratamiento t on t.id_tratamiento = v.id_tratamiento1 JOIN cliente c on m.dni_cliente1 = c.dni_cliente where " + parametroDeBusqueda;                                  
             PreparedStatement stm = con.prepareStatement(sql);           
             System.out.println(stm.toString());
             ResultSet rs = stm.executeQuery();
@@ -64,8 +65,19 @@ public class VisitaTableModelResultSet extends AbstractTableModel {
             }
             return resultArray;
         } catch (SQLException ex) {
-            System.out.println("Error al buscar datos de visitas");
+            int stackNumber = 0;
+            for (int i = 0; i < ex.getStackTrace().length; i++) {
+                if("<init>".equals(ex.getStackTrace()[i].getMethodName())){
+                    stackNumber = i - 1;
+                }
+            }            
+            System.out.println("*******************************************************");
+            System.out.println("Error al llenar tabla");
             System.out.println(ex);
+            System.out.println("Error en: " + ex.getStackTrace()[stackNumber].getClassName() + " ---> " + ex.getStackTrace()[stackNumber].getMethodName() + " || Line: " + ex.getStackTrace()[stackNumber].getLineNumber());
+            System.out.println("*******************************************************");
+                       
+            statusOk = false;
             return null;
         } finally {
             try {

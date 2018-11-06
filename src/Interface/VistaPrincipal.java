@@ -146,7 +146,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 popUp.add(cargar);
                 popUp.revalidate();
                 popUp.repaint();
-                System.out.println("asd");
+                
                 
                 
             }    
