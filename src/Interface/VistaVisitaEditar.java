@@ -5,10 +5,13 @@
  */
 package Interface;
 
-import Controlador.TextFieldDayValidator;
-import Controlador.TextFieldOnlyNumbers;
-import Controlador.TextFieldValidator;
+import Interface.ComboBoxItems.ComboBoxMascotaItems;
+import Interface.ComboBoxItems.ComboBoxTratamientoItems;
+import clasesdata.Conexion;
 import clasesprincipales.VisitaDeAtencion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFormattedTextField;
@@ -21,16 +24,17 @@ import javax.swing.JSpinner;
 public class VistaVisitaEditar extends javax.swing.JFrame {
 
     VisitaDeAtencion visita;
+    ArrayList<ComboBoxMascotaItems> listOfMascotas = new ArrayList<>();
+    ArrayList<ComboBoxTratamientoItems> listOfTratamientos = new ArrayList<>();
 
     public VistaVisitaEditar(VisitaDeAtencion visita) {
 
         this.visita = visita;
         initComponents();
+        loadComboBoxes();
         setLocationRelativeTo(null);
-        jTextFieldIdMascota.setText(String.valueOf(visita.getIdMascota()));
-        jTextFieldIdTratamiento.setText(String.valueOf(visita.getIdTratamiento()));
-        jTextFieldDia.setText(visita.getFecha().toString());
-        jTextFieldPrecio.setText(String.valueOf(visita.getPrecio()));
+
+        jFormattedTextField1.setText(String.valueOf(visita.getPrecio()));
         jSpinner1.setValue(visita.getFecha());
         Calendar date = Calendar.getInstance();
         date.setTime((Date) jSpinner1.getValue());
@@ -52,19 +56,13 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldIdMascota = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextFieldIdTratamiento = new javax.swing.JTextField();
-        jTextFieldDia = new javax.swing.JTextField();
-        jTextFieldPrecio = new javax.swing.JTextField();
-        jTextFieldMes = new javax.swing.JTextField();
-        jTextFieldAnio = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jSpinner1 = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxMascota = new javax.swing.JComboBox<>();
+        jComboBoxTratamiento = new javax.swing.JComboBox<>();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Editar Visita");
@@ -83,7 +81,7 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(226, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
@@ -96,7 +94,7 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addGap(5, 5, 5))
+                .addGap(6, 6, 6))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
@@ -104,50 +102,25 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar visita de atencion"));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Id de la mascota:");
-
-        jTextFieldIdMascota.setColumns(8);
+        jLabel1.setText("Mascota:");
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Id del tratamiento:");
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("Fecha:");
+        jLabel2.setText("Tratamiento:");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Precio:");
 
-        jTextFieldIdTratamiento.setColumns(8);
-
-        jTextFieldDia.setColumns(2);
-        jTextFieldDia.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextFieldDiaFocusLost(evt);
-            }
-        });
-
-        jTextFieldPrecio.setColumns(8);
-        jTextFieldPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextFieldPrecioKeyPressed(evt);
-            }
-        });
-
-        jTextFieldMes.setColumns(2);
-
-        jTextFieldAnio.setColumns(4);
-
-        jLabel5.setText("/");
-
-        jLabel6.setText("/");
-
-        jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
+        jSpinner1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jSpinner1.setModel(new javax.swing.SpinnerDateModel());
         JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor)jSpinner1.getEditor();
         JFormattedTextField ftf = editor.getTextField();
         ftf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.MEDIUM))));
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Fecha:");
+
+        jFormattedTextField1.setColumns(10);
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#+0.0"))));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -157,29 +130,17 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldIdMascota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextFieldDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldIdTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jSpinner1)
+                        .addComponent(jComboBoxMascota, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBoxTratamiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,26 +148,20 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextFieldIdMascota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxMascota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextFieldIdTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextFieldDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -215,20 +170,8 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TextFieldValidator validator = new TextFieldValidator();
-        validator.addField(jTextFieldDia, new TextFieldDayValidator());
-        validator.addField(jTextFieldPrecio, new TextFieldOnlyNumbers());
-        System.out.println(validator.validate());
 
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextFieldDiaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldDiaFocusLost
-
-    }//GEN-LAST:event_jTextFieldDiaFocusLost
-
-    private void jTextFieldPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldPrecioKeyPressed
-
-    }//GEN-LAST:event_jTextFieldPrecioKeyPressed
 
     /**
      * @param args the command line arguments
@@ -263,21 +206,50 @@ public class VistaVisitaEditar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBoxMascota;
+    private javax.swing.JComboBox<String> jComboBoxTratamiento;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextFieldAnio;
-    private javax.swing.JTextField jTextFieldDia;
-    private javax.swing.JTextField jTextFieldIdMascota;
-    private javax.swing.JTextField jTextFieldIdTratamiento;
-    private javax.swing.JTextField jTextFieldMes;
-    private javax.swing.JTextField jTextFieldPrecio;
     // End of variables declaration//GEN-END:variables
+
+    private void loadComboBoxes() {
+        String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dni_cliente1 order by alias;";
+        String sqltrar = "SELECT id_tratamiento, nombre_trat, precio from tratamiento";
+        //String sqlmascotas = "SELECT id_masc, alias, c.nombre_apellido from mascota join cliente c on c.dni_cliente = dnicliente1;";
+        //String sqltrar = "SELECT idtratamiento, nombretrat, precio from tratamiento";
+
+        try (PreparedStatement stmMascotas = Conexion.getConexion().prepareStatement(sqlmascotas); PreparedStatement stmTrat = Conexion.getConexion().prepareStatement(sqltrar)) {
+
+            ResultSet rs = stmMascotas.executeQuery();
+            while (rs.next()) {
+                listOfMascotas.add(new ComboBoxMascotaItems(rs.getInt(1), rs.getString(2), rs.getString(3)));
+            }
+
+            rs = stmTrat.executeQuery();
+            while (rs.next()) {
+                listOfTratamientos.add(new ComboBoxTratamientoItems(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
+            }
+        } catch (Exception ex) {
+            System.out.println("*******************************************************");
+            System.out.println("Error al cargar combos");
+            System.out.println(ex);
+            System.out.println("Error en: " + ex.getStackTrace()[0].getClassName() + " ---> " + ex.getStackTrace()[0].getMethodName() + " || Line: " + ex.getStackTrace()[0].getLineNumber());
+            System.out.println("*******************************************************");
+        }
+
+        for (ComboBoxMascotaItems item : listOfMascotas) {
+            jComboBoxMascota.addItem(item.toString());
+        }
+
+        for (ComboBoxTratamientoItems item : listOfTratamientos) {
+            jComboBoxTratamiento.addItem(item.toString());
+        }
+
+    }
 }
